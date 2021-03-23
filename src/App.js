@@ -8,8 +8,25 @@ class App extends React.Component {
     this.state = { newChore: '', taskList: [] };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.addItem = this.addItem.bind(this);
-    //this.taskOrder = this.taskOrder.bind(this);
+    this.removeTodo = this.removeTodo.bind(this);
+    this.completeTodo = this.completeTodo.bind(this);
+
+  }
+  componentDidMount() {
+    let taskList = window.localStorage.getItem('taskList')
+    if (taskList) {
+      this.setState({ taskList: JSON.parse(taskList) })
+    }
+    else {
+      window.localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+      
+    }
+  }
+
+  componentDidUpdate() {
+    window.localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
+    console.log(JSON.stringify(this.state.taskList))
+   
   }
 
   handleChange(event) {
@@ -22,18 +39,26 @@ class App extends React.Component {
         newChore: ''
       })
     }
-
-
     event.preventDefault();
   }
-  addItem() {
-    //create a new todo with a unique id
-    //const Chores = [...this.state.taskList];
-    //Chores.map
-    //copy of current list of items
+  removeTodo(event){
+    
+  
+ }
+  completeTodo(event){
+    const filterTodos = this.state.taskList.filter(task )
 
-    //add new item to the list
   }
+
+  
+  //addItem() {
+  //create a new todo with a unique id
+  //const Chores = [...this.state.taskList];
+  //Chores.map
+  //copy of current list of items
+
+  //add new item to the list
+  //}
   render() {
 
     return (
@@ -45,7 +70,7 @@ class App extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <div className="input-group mb-3 mt-3">
             <input type="text" value={this.state.newChore} onChange={this.handleChange} className="form-control" placeholder="What do you need to do?" aria-label="Recipient's username" aria-describedby="button-addon2" />
-            <button className="btn btn-outline-secondary" type="button" onClick={this.handleSubmit} value="Submit" id="button-addon2">Submit</button>
+            <button className="btn btn-outline-secondary" type="button" value="Submit" id="button-addon2">Submit</button>
           </div>
         </form>
         {this.state.taskList.map((item, index) => <Todo key={index} Chore={item} />)}
