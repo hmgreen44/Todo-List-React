@@ -32,6 +32,7 @@ class App extends React.Component {
   handleChange(event) {
     this.setState({ newChore: event.target.value })
   }
+
   handleSubmit(event) {
     if (this.state.newChore !== '') {
       let choreObj = {
@@ -46,15 +47,16 @@ class App extends React.Component {
     }
     event.preventDefault();
   }
+
   handleRemove(id) {
+    const filterChores = this.state.taskList.filter(chore => chore.id !== id);
+    this.setState({ taskList: filterChores });
     // function filterHelper(chore) {
     //   if (chore.id !== id) {
     //     return chore;
     //   }
     // }
     //const filterHelper = chore => chore.id !== id
-    const filterChores = this.state.taskList.filter(chore => chore.id !== id);
-    this.setState({ taskList: filterChores });
     //this.setState({ taskList: this.state.taskList.filter(chore => chore.id !== id) });
   }
 
@@ -66,11 +68,9 @@ class App extends React.Component {
         }
         return choreObj
       })
-
-
-
     })
   }
+
   render() {
     return (
       <div className="App container" >
