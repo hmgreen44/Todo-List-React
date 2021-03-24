@@ -9,7 +9,7 @@ class App extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.removeTodo = this.removeTodo.bind(this);
-    this.completeTodo = this.completeTodo.bind(this);
+    // this.completeTodo = this.completeTodo.bind(this);
 
   }
   componentDidMount() {
@@ -19,14 +19,14 @@ class App extends React.Component {
     }
     else {
       window.localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-      
+
     }
   }
 
   componentDidUpdate() {
     window.localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-    console.log(JSON.stringify(this.state.taskList))
-   
+
+
   }
 
   handleChange(event) {
@@ -34,33 +34,36 @@ class App extends React.Component {
   }
   handleSubmit(event) {
     if (this.state.newChore !== '') {
+      let choreObj = {
+        id: Date.now(),
+        taskText: this.state.newChore,
+        completed: false
+      }
       this.setState({
-        taskList: [...this.state.taskList, this.state.newChore],
-        newChore: ''
+        taskList: [...this.state.taskList, choreObj],
+        newChore: '',
       })
     }
     event.preventDefault();
   }
-  removeTodo(event){
-    
-  
- }
-  completeTodo(event){
-    const filterTodos = this.state.taskList.filter(task )
+  removeTodo(id) {
+    // function filterHelper(chore) {
+    //   if (chore.id !== id) {
+    //     return chore;
+    //   }
 
+    // }
+    //const filterHelper = chore => chore.id !== id
+
+    const filterChores = this.state.taskList.filter(chore => chore.id !== id);
+    this.setState({ taskList: filterChores });
+
+    //this.setState({ taskList: this.state.taskList.filter(chore => chore.id !== id) });
   }
 
-  
-  //addItem() {
-  //create a new todo with a unique id
-  //const Chores = [...this.state.taskList];
-  //Chores.map
-  //copy of current list of items
+  //completeTodo(event){
 
-  //add new item to the list
-  //}
   render() {
-
     return (
       <div className="App container">
         <div className="card-body text-center">
@@ -73,8 +76,7 @@ class App extends React.Component {
             <button className="btn btn-outline-secondary" type="button" value="Submit" id="button-addon2">Submit</button>
           </div>
         </form>
-        {this.state.taskList.map((item, index) => <Todo key={index} Chore={item} />)}
-
+        {this.state.taskList.map((item, index) => <Todo key={index} chore={item} removeTodo={this.removeTodo} />)}
       </div>
     );
   }
