@@ -8,11 +8,11 @@ class App extends React.Component {
     this.state = { newChore: '', taskList: [] };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.removeTodo = this.removeTodo.bind(this);
-    // this.completeTodo = this.completeTodo.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    this.handleComplete = this.handleComplete.bind(this);
 
   }
-  
+
   componentDidMount() {
     let taskList = window.localStorage.getItem('taskList')
     if (taskList) {
@@ -46,7 +46,7 @@ class App extends React.Component {
     }
     event.preventDefault();
   }
-  removeTodo(id) {
+  handleRemove(id) {
     // function filterHelper(chore) {
     //   if (chore.id !== id) {
     //     return chore;
@@ -58,11 +58,22 @@ class App extends React.Component {
     //this.setState({ taskList: this.state.taskList.filter(chore => chore.id !== id) });
   }
 
-  //completeTodo(event){
+  handleComplete(id) {
+    this.setState({
+      taskList: this.state.taskList.map(choreObj => {
+        if (choreObj.id === id) {
+          choreObj.completed = !choreObj.completed
+        }
+        return choreObj
+      })
 
+
+
+    })
+  }
   render() {
     return (
-      <div className="App container">
+      <div className="App container" >
         <div className="card-body text-center">
           <blockquote className="blockquote mb-0 mt-5" />
           <p>My Todo List</p>
@@ -73,7 +84,7 @@ class App extends React.Component {
             <button className="btn btn-outline-secondary" type="button" onClick={this.handleSubmit} value="Submit" id="button-addon2">Submit</button>
           </div>
         </form>
-        {this.state.taskList.map((item, index) => <Todo key={index} chore={item} removeTodo={this.removeTodo} />)}
+        { this.state.taskList.map((item, index) => <Todo key={index} chore={item} handleRemove={this.handleRemove} handleComplete={this.handleComplete} />)}
       </div>
     );
   }
