@@ -12,6 +12,7 @@ class App extends React.Component {
     // this.completeTodo = this.completeTodo.bind(this);
 
   }
+  
   componentDidMount() {
     let taskList = window.localStorage.getItem('taskList')
     if (taskList) {
@@ -25,7 +26,6 @@ class App extends React.Component {
 
   componentDidUpdate() {
     window.localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
-
 
   }
 
@@ -51,13 +51,10 @@ class App extends React.Component {
     //   if (chore.id !== id) {
     //     return chore;
     //   }
-
     // }
     //const filterHelper = chore => chore.id !== id
-
     const filterChores = this.state.taskList.filter(chore => chore.id !== id);
     this.setState({ taskList: filterChores });
-
     //this.setState({ taskList: this.state.taskList.filter(chore => chore.id !== id) });
   }
 
@@ -73,7 +70,7 @@ class App extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <div className="input-group mb-3 mt-3">
             <input type="text" value={this.state.newChore} onChange={this.handleChange} className="form-control" placeholder="What do you need to do?" aria-label="Recipient's username" aria-describedby="button-addon2" />
-            <button className="btn btn-outline-secondary" type="button" value="Submit" id="button-addon2">Submit</button>
+            <button className="btn btn-outline-secondary" type="button" onClick={this.handleSubmit} value="Submit" id="button-addon2">Submit</button>
           </div>
         </form>
         {this.state.taskList.map((item, index) => <Todo key={index} chore={item} removeTodo={this.removeTodo} />)}
