@@ -18,8 +18,5 @@ function Todo(props) {
             <button className="btn btn-outline-secondary" type="button" onClick={() => props.handleRemove(props.chore.id)} id="button-addon2">X</button>
         </div>
     )
-
-
-
 }
 export default Todo;
