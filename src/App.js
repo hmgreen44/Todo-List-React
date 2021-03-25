@@ -5,7 +5,7 @@ import Todo from "./Components/Todo"
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { newChore: '', taskList: [] };
+    this.state = { newChore: '', taskList: [], tasksViewable: "All" };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
@@ -47,6 +47,10 @@ class App extends React.Component {
     }
     event.preventDefault();
   }
+  viewableTasks() {
+
+
+  }
 
   handleRemove(id) {
     const filterChores = this.state.taskList.filter(chore => chore.id !== id);
@@ -70,21 +74,46 @@ class App extends React.Component {
       })
     })
   }
+  taskFilter() {
+
+  }
 
   render() {
+    const filterHelper = item => {
+      if (item.completed && this.state.tasksViewable === 'Completed') {
+        return item
+      }
+      if (this.state.tasksViewable === 'All') {
+        return item
+      }
+      if (this.state.tasksViewable === 'Active' && !item.completed) {
+        return item
+      }
+    }
+
     return (
       <div className="App container" >
         <div className="card-body text-center">
           <blockquote className="blockquote mb-0 mt-5" />
           <p>My Todo List</p>
+          <button type="button" onClick={filterHelper} className="btn btn-outline-secondary mx-5">All Tasks</button>
+          <button type="button" onClick={filterHelper} className="btn btn-outline-secondary mx-3">Active Tasks</button>
+          <button type="button" onClick={filterHelper} className="btn btn-outline-secondary mx-4">Completed Tasks</button>
+          <div class="card">
+            <div class="card-body">
+              Tasks Left: { this.state.taskList.filter(item => !item.completed).length }
+            </div>
+          </div>
         </div>
+
         <form onSubmit={this.handleSubmit}>
           <div className="input-group mb-3 mt-3">
             <input type="text" value={this.state.newChore} onChange={this.handleChange} className="form-control" placeholder="What do you need to do?" aria-label="Recipient's username" aria-describedby="button-addon2" />
             <button className="btn btn-outline-secondary" type="button" onClick={this.handleSubmit} value="Submit" id="button-addon2">Submit</button>
           </div>
         </form>
-        { this.state.taskList.map((item, index) => <Todo key={index} chore={item} handleRemove={this.handleRemove} handleComplete={this.handleComplete} />)}
+
+        { this.state.taskList.filter(filterHelper).map((item, index) => <Todo key={index} chore={item} handleRemove={this.handleRemove} handleComplete={this.handleComplete} />)}
       </div>
     );
   }
