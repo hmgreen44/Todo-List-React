@@ -5,14 +5,15 @@ import Todo from "./Components/Todo"
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { newChore: '', taskList: [], tasksViewable: "All" };
+    this.state = { newChore: '', taskList: [], tasksViewable: 'all' };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleComplete = this.handleComplete.bind(this);
-
+    this.setFilter = this.setFilter.bind(this);
+    this.clearCompleted = this.clearCompleted.bind(this);
   }
-
+  //ran
   componentDidMount() {
     let taskList = window.localStorage.getItem('taskList')
     if (taskList) {
@@ -23,7 +24,7 @@ class App extends React.Component {
 
     }
   }
-
+  //whenever you set state this runs to update local storage
   componentDidUpdate() {
     window.localStorage.setItem('taskList', JSON.stringify(this.state.taskList))
 
@@ -46,10 +47,6 @@ class App extends React.Component {
       })
     }
     event.preventDefault();
-  }
-  viewableTasks() {
-
-
   }
 
   handleRemove(id) {
@@ -74,40 +71,47 @@ class App extends React.Component {
       })
     })
   }
-  taskFilter() {
+  setFilter(newFilter){
+    this.setState({tasksViewable: newFilter })
 
+  }
+  clearCompleted(){
+    const filterCompleted = this.state.taskList.filter(item => !item.completed)
+    this.setState({ taskList: filterCompleted })
   }
 
   render() {
     const filterHelper = item => {
-      if (item.completed && this.state.tasksViewable === 'Completed') {
+      if (this.state.tasksViewable === 'all') {
         return item
       }
-      if (this.state.tasksViewable === 'All') {
-        return item
+      if (item.completed && this.state.tasksViewable === 'completed') {
+       return item
       }
-      if (this.state.tasksViewable === 'Active' && !item.completed) {
+      if (!item.completed && this.state.tasksViewable === 'active') {
         return item
       }
     }
 
+
     return (
       <div className="App container" >
         <div className="card-body text-center">
-          <blockquote className="blockquote mb-0 mt-5" />
+          <blockquote className="blockquote mb-0 mt-5 p-2" />
           <p>My Todo List</p>
-          <button type="button" onClick={filterHelper} className="btn btn-outline-secondary mx-5">All Tasks</button>
-          <button type="button" onClick={filterHelper} className="btn btn-outline-secondary mx-3">Active Tasks</button>
-          <button type="button" onClick={filterHelper} className="btn btn-outline-secondary mx-4">Completed Tasks</button>
-          <div class="card">
-            <div class="card-body">
-              Tasks Left: { this.state.taskList.filter(item => !item.completed).length }
+          <button type="button" onClick={() => this.setFilter('all')} className="btn btn-outline-secondary mx-3 mb-2">All Tasks</button>
+          <button type="button" onClick={() => this.setFilter('active')} className="btn btn-outline-secondary mx-3 mb-2">Active Tasks</button>
+          <button type="button" onClick={() => this.setFilter('completed')} className="btn btn-outline-secondary mx-3 mb-2">Completed Tasks</button>
+          <button type="button" onClick={() => this.clearCompleted('clear')} className="btn btn-outline-secondary mx-3 mb-2">Clear Completed Tasks</button>
+          <div className="card">
+            <div className="card-body border-0">
+              Tasks Left: {this.state.taskList.filter(item => !item.completed).length}
             </div>
           </div>
         </div>
 
         <form onSubmit={this.handleSubmit}>
-          <div className="input-group mb-3 mt-3">
+          <div className="input-group">
             <input type="text" value={this.state.newChore} onChange={this.handleChange} className="form-control" placeholder="What do you need to do?" aria-label="Recipient's username" aria-describedby="button-addon2" />
             <button className="btn btn-outline-secondary" type="button" onClick={this.handleSubmit} value="Submit" id="button-addon2">Submit</button>
           </div>
@@ -120,3 +124,5 @@ class App extends React.Component {
 }
 
 export default App;
+
+
